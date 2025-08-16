@@ -1,0 +1,365 @@
+/* Base Styles */
+.homepage {
+  background-color: #f5f5f5;
+  padding-bottom: 40px;
+  font-family: "Amazon Ember", Arial, sans-serif;
+  padding-top: 0;
+}
+
+/* Hero Banner */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+  top: 0;
+}
+.homepage {
+  /* Your existing hero styles */
+  margin-top: 20px; /* Ensure no additional margin */
+}
+
+.hero-image-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity 0.5s ease;
+}
+
+.hero-image.fading {
+  opacity: 0.7;
+}
+
+.hero-caption {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 80%;
+}
+
+.hero-caption h2 {
+  margin: 0 0 10px 0;
+  font-size: 2.2rem;
+  font-weight: 500;
+}
+
+.hero-caption p {
+  margin: 0;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.hero-controls {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.hero-control-btn {
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.hero-control-btn:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.slide-indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 2;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+/* Product Sections */
+.product-section {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+  margin-bottom: 40px;
+}
+
+.product-section h2 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0c14b;
+  text-align: center;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 products per row */
+  gap: 35px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  margin-bottom: 40px;
+}
+
+.vertical-scroll-carousel {
+  max-height: none; /* Adjust as needed */
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
+  padding-right: 4px; /* Optional for scrollbar space */
+}
+
+.product-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding-bottom: 15px;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-image-container {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+  overflow: hidden;
+  position: relative;
+}
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #cc0c39; /* Amazon red */
+  color: white;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border-radius: 4px;
+  z-index: 2;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.stock-bar-container {
+  margin: 0 15px 4px;
+}
+
+.stock-bar-label {
+  font-size: 12px;
+  color: #444;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+.stock-bar-track {
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.stock-bar-fill {
+  height: 100%;
+  background-color: #f09808; /* Green */
+  transition: width 0.3s ease;
+}
+
+.product-image-container img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image-container img {
+  transform: scale(1.05);
+}
+
+.product-card h3 {
+  margin: 15px 15px 5px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.product-card p {
+  margin: 0 15px 10px;
+  font-size: 0.9rem;
+  color: #666;
+  min-height: 40px;
+}
+
+.product-card strong {
+  display: block;
+  margin: 0 15px 15px;
+  font-size: 1.2rem;
+  color: #b12704;
+  font-weight: bold;
+}
+
+.add-to-cart-btn {
+  display: block;
+  width: calc(100% - 30px);
+  margin: 0 15px;
+  padding: 8px;
+  background: #f0c14b;
+  border: none;
+  border-radius: 4px;
+  color: #111;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  background: #ddb347;
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.discounted-price {
+  font-size: 1.2rem;
+  color: black;
+  font-weight: bold;
+}
+
+.original-price {
+  font-size: 0.95rem;
+  color: #888;
+  text-decoration: line-through;
+}
+
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  margin: -10px 15px 2px 15px; /* Fix the spacing properly */
+  font-size: 0.85rem;
+  color: #444;
+}
+
+.product-meta .stock {
+  font-weight: 500;
+  color: #007600; /* greenish for available */
+}
+
+.product-meta .colors {
+  font-weight: 500;
+  color: #555;
+}
+.product-stock-info {
+  margin-bottom: -2px; /* Tighten space below this line */
+}
+
+.price-line {
+  margin-top: -2px; /* Tighten space above price line */
+}
+.amazon-toast-success {
+  background-color: #f0fff0 !important; /* light green background */
+  border: 1px solid #c6e0c6 !important;
+  color: #007600 !important; /* Amazon dark green text */
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 4px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-banner {
+    height: 300px;
+  }
+
+  .hero-caption h2 {
+    font-size: 1.5rem;
+  }
+
+  .hero-caption p {
+    font-size: 1rem;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .product-image-container {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-banner {
+    height: 250px;
+  }
+
+  .hero-caption {
+    bottom: 20px;
+    padding: 10px 15px;
+  }
+
+  .hero-caption h2 {
+    font-size: 1.2rem;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+}

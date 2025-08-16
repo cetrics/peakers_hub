@@ -1,0 +1,203 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  padding-top: var(--fixed-elements-height); /* Push content down */
+}
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #131921;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap: 20px;
+  height: 60px; /* Add fixed height */
+  box-sizing: border-box; /* Include padding in height calculation */
+  height: var(--header-height);
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #f0c14b;
+}
+.logo span {
+  color: white;
+}
+
+.delivery {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 13px;
+}
+.delivery i {
+  margin-right: 5px;
+}
+
+.search-bar {
+  flex: 1;
+  display: flex;
+  height: 40px;
+  margin: 0 10px;
+  border-radius: 6px; /* makes the entire bar rounded */
+  overflow: hidden; /* ensures children stay inside rounded area */
+  border: 1px solid #ccc; /* optional border */
+  background-color: white; /* optional background */
+}
+.search-bar select,
+.search-bar input,
+.search-bar button {
+  border: none;
+  outline: none;
+  height: 100%;
+}
+
+.search-bar select {
+  border: none;
+  padding: 0 10px;
+}
+.search-bar input {
+  flex: 1;
+  padding: 0 10px;
+  border: none;
+}
+.search-bar button {
+  background-color: #f3a847;
+  border: none;
+  padding: 0 15px;
+  cursor: pointer;
+}
+
+.nav-options {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 13px;
+}
+
+.nav-options .language {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cart {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.cart i {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  left: 12px;
+  background: orange;
+  border-radius: 50%;
+  padding: 1px 5px;
+  font-size: 12px;
+  color: black;
+}
+.search-select {
+  background-color: #e0e0e0; /* light grey */
+  color: #000; /* black text */
+  border: none;
+  padding: 8px;
+}
+
+.nav-section {
+  position: fixed;
+  top: 60px; /* Position below header */
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: #232f3e;
+  color: white;
+  padding: 10px 20px;
+  font-size: 14px;
+  height: 60px; /* Add fixed height */
+  box-sizing: border-box;
+  height: var(--header-height);
+}
+
+.nav-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-section ul li {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.3s;
+}
+
+.nav-section ul li:hover {
+  color: #f0c14b;
+}
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #f0c14b;
+}
+.logo span {
+  color: white;
+}
+.main-content {
+  margin-top: 100px; /* header height (60px) + nav height (40px) */
+  padding: 20px;
+}
+:root {
+  --header-height: 60px;
+  --nav-height: 40px;
+  --fixed-elements-height: calc(var(--header-height) + var(--nav-height));
+}
+
+.account-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+}
+
+.account-link:visited {
+  color: inherit;
+}
+
+.account-link:hover .account {
+  color: #f0c14b; /* optional hover color */
+}
+
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+}
+
+.logo-link:visited {
+  color: inherit;
+}
+
+.logo-link:hover .logo {
+  color: #f0c14b; /* optional hover effect */
+}
+.hide {
+  display: none !important;
+}
+
+body.login-page .main-content {
+  margin-top: 0 !important;
+}

@@ -1,0 +1,178 @@
+/* Page background */
+.login-page {
+  background: white;
+  min-height: 100vh;
+}
+
+/* Container centers the box */
+.admin-login-container {
+  max-width: 350px;
+  margin: 40px auto;
+  padding: 0 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial,
+    sans-serif;
+  color: #0f1111;
+}
+
+/* Logo */
+.logo-link {
+  display: inline-block;
+  text-decoration: none;
+  margin: 20px 0 10px;
+}
+.admin-login-logo .logo1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #131921; /* Amazon dark header tone */
+}
+.admin-login-logo .logo1 span {
+  color: #ff9900; /* Amazon orange accent */
+}
+
+/* Card/box */
+.admin-login-box {
+  background: #fff;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  padding: 20px 24px;
+  box-shadow: 0 1px 2px rgba(15, 17, 17, 0.15);
+}
+.admin-login-box h1 {
+  font-size: 28px;
+  font-weight: 400;
+  margin: 0 0 14px;
+}
+
+/* Error banner */
+.admin-login-error {
+  background: #fff8f8;
+  border: 1px solid #d00;
+  color: #b12704; /* Amazon error red */
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+/* Inputs */
+.admin-input-group {
+  margin-bottom: 14px;
+}
+.admin-input-group label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.admin-input-group input {
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid #a6a6a6;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+}
+.admin-input-group input:focus {
+  outline: 0;
+  border-color: #e77600;
+  box-shadow: 0 0 0 3px rgba(228, 121, 17, 0.3);
+}
+
+/* Primary button (Amazon yellow) */
+.admin-login-button {
+  width: 100%;
+  border: 1px solid #a88734;
+  border-top-color: #9c7e31;
+  border-bottom-color: #846a29;
+  border-radius: 8px;
+  background: linear-gradient(#f7dfa5, #f0c14b);
+  padding: 8px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.admin-login-button:hover {
+  background: linear-gradient(#f5d78e, #eeb933);
+}
+.admin-login-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Fine print */
+.admin-login-terms {
+  font-size: 12px;
+  color: #565959;
+  margin: 14px 0;
+  line-height: 1.4;
+}
+.admin-login-terms a {
+  color: #0066c0;
+  text-decoration: none;
+}
+.admin-login-terms a:hover {
+  color: #c45500;
+  text-decoration: underline;
+}
+
+/* Divider with text */
+.admin-login-divider {
+  position: relative;
+  text-align: center;
+  margin: 18px 0 12px;
+  font-size: 12px;
+  color: #767676;
+}
+.admin-login-divider::before,
+.admin-login-divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #e7e7e7;
+}
+.admin-login-divider::before {
+  left: 0;
+}
+.admin-login-divider::after {
+  right: 0;
+}
+
+/* Create account (Amazon gray button) */
+.admin-create-account-link {
+  display: block;
+  text-decoration: none;
+}
+.admin-create-account {
+  width: 100%;
+  border: 1px solid #adb1b8;
+  border-top-color: #a2a6ac;
+  border-bottom-color: #8d9096;
+  border-radius: 8px;
+  background: linear-gradient(#f7f8fa, #e7e9ec);
+  padding: 8px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.admin-create-account:hover {
+  background: linear-gradient(#f6f7f9, #d9dce1);
+}
+
+/* Links */
+a {
+  color: #0066c0;
+}
+a:hover {
+  color: #c45500;
+}
+
+/* Small responsive touch */
+@media (max-width: 420px) {
+  .admin-login-container {
+    margin-top: 24px;
+  }
+  .admin-login-box {
+    padding: 16px 18px;
+  }
+}

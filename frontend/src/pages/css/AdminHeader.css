@@ -1,0 +1,103 @@
+.orders-header {
+  padding: 40px;
+  font-family: "Arial", sans-serif;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 0;
+}
+
+.breadcrumb {
+  color: #565959;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.breadcrumb a {
+  color: #007185;
+  text-decoration: none;
+}
+
+/* Center h1 */
+h1 {
+  font-size: 28px;
+  margin: 10px 0 20px 0;
+  text-align: center;
+}
+
+/* Center nav buttons */
+.orders-nav {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 0;
+  margin-bottom: 5px;
+  justify-content: center;
+  border-bottom: 2px solid #bbb;
+  width: 70%;
+  margin-left: -10px; /* Push it away from the left side only */
+}
+
+/* Buttons styling */
+.orders-nav button {
+  background: none;
+  border: none;
+  color: #007185;
+  cursor: pointer;
+  font-weight: normal;
+  padding: 0;
+  font-size: 16px;
+}
+
+.orders-nav button.active {
+  border-bottom: 3px solid #f08804;
+  font-weight: bold;
+  color: #111;
+}
+.title-search-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align items to the left */
+  width: 100%;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.title-search-wrapper h1 {
+  margin: 0;
+  margin-left: 350px; /* Push title to the right */
+  margin-right: 390px; /* Space between title and search */
+  padding: 0;
+}
+.search-bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Search icon inside input box */
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 2px solid #37475a;
+  border-radius: 8px;
+  padding: 4px 8px;
+  gap: 6px;
+}
+
+.search-input-wrapper input {
+  border: none;
+  outline: none;
+  padding: 6px;
+  width: 200px;
+}
+
+.search-btn {
+  background-color: #232f3e;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}

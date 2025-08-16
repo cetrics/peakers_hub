@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Peakers Hub</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/header.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='dist/assets/main.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/footer.css') }}"
+    />
+  </head>
+
+  <body>
+    <header class="header">
+      <a href="/" class="logo-link">
+        <div class="logo">Peakers<span>Hub</span></div>
+      </a>
+
+      <div class="delivery">
+        <i class="fa-solid fa-map-marker-alt"></i>
+        <div>
+          <small>Delivery within</small>
+          <strong>Nairobi</strong>
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <select class="search-select">
+          <option>All</option>
+        </select>
+        <input type="text" placeholder="Search Peakers Hub" />
+        <button><i class="fa-solid fa-search"></i></button>
+      </div>
+
+      <div class="nav-options">
+        <div class="language">
+          <img src="https://flagcdn.com/us.svg" alt="EN" width="20" />
+          <span>EN</span>
+        </div>
+
+        <a href="/login" id="auth-link" class="account-link">
+          <div class="account">
+            <i class="fa-solid fa-lock"></i>
+            <strong id="auth-text">Sign in</strong>
+          </div>
+        </a>
+
+        <div class="orders">
+          <small>Returns</small><br />
+          <strong>& Orders</strong>
+        </div>
+
+        <div class="cart" onclick="window.location.href='/cart'">
+          <i class="fa-solid fa-shopping-cart"></i>
+          <span class="cart-count">0</span> Cart
+        </div>
+      </div>
+    </header>
+    <nav class="nav-section">
+      <ul>
+        <li><i class="fa-solid fa-bars"></i> All</li>
+        <li>Today's Deals</li>
+        <li>Shop</li>
+        <li>Gift Cards</li>
+        <li>Customer Service</li>
+        <li>Trusted companies</li>
+        <li>Our Policy</li>
+      </ul>
+    </nav>
+    <div id="loader" class="page-loader">
+      <div class="spinner"></div>
+    </div>
+
+    <div id="root"></div>
+    <footer class="footer">
+      <div class="footer-back-to-top">
+        <a href="#root">Back to top</a>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-column">
+          <h3>Get to Know Us</h3>
+          <ul>
+            <li><a href="/cart">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press Releases</a></li>
+            <li><a href="#">Peakers Hub Science</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Make Money with Us</h3>
+          <ul>
+            <li><a href="#">Sell products on Peakers Hub</a></li>
+            <li><a href="#">Sell on Peakers Hub Business</a></li>
+            <li><a href="#">Become an Affiliate</a></li>
+            <li><a href="#">Advertise Your Products</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Payment Products</h3>
+          <ul>
+            <li><a href="#">Peakers Hub Business Card</a></li>
+            <li><a href="#">Shop with Points</a></li>
+            <li><a href="#">Reload Your Balance</a></li>
+            <li><a href="#">Peakers Hub Currency Converter</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Let Us Help You</h3>
+          <ul>
+            <li><a href="#">Peakers Hub and COVID-19</a></li>
+            <li><a href="#">Your Account</a></li>
+            <li><a href="#">Your Orders</a></li>
+            <li><a href="#">Shipping Rates & Policies</a></li>
+            <li><a href="#">Returns & Replacements</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-logo">
+          <div class="logo">Peakers<span>Hub</span></div>
+        </div>
+
+        <div class="footer-locale">
+          <i class="fa-solid fa-globe"></i>
+          <span>English</span>
+          <i class="fa-solid fa-caret-down"></i>
+        </div>
+
+        <div class="footer-currency">
+          <i class="fa-solid fa-dollar-sign"></i>
+          <span>USD - U.S. Dollar</span>
+        </div>
+
+        <div class="footer-country">
+          <img
+            src="https://flagcdn.com/us.svg"
+            alt="United States"
+            width="20"
+          />
+          <span>United States</span>
+        </div>
+      </div>
+
+      <div class="footer-copyright">
+        <div class="footer-copyright-links">
+          <a href="#">Conditions of Use</a>
+          <a href="#">Privacy Notice</a>
+          <a href="#">Your Ads Privacy Choices</a>
+        </div>
+        <div class="footer-copyright-text">
+          © 2023, PeakersHub.com, Inc. or its affiliates
+        </div>
+      </div>
+    </footer>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='dist/assets/main.js') }}"
+    ></script>
+  </body>
+</html>
