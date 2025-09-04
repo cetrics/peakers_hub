@@ -1,0 +1,116 @@
+/* Container */
+.add-address-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  font-family: "Amazon Ember", Arial, sans-serif;
+}
+
+/* Heading */
+.add-address-container h2 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+/* Form fields */
+.address-form .form-group {
+  margin-bottom: 15px;
+}
+
+.address-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #111;
+}
+
+.address-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #a6a6a6;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.address-form input:focus {
+  outline: none;
+  border-color: #e77600; /* Amazon orange */
+  box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+}
+
+/* Checkbox */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #111;
+}
+
+.checkbox-group input {
+  margin-right: 8px;
+}
+
+/* Buttons */
+.save-btn {
+  background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+  border: 1px solid #a88734;
+  border-radius: 3px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111;
+}
+
+.save-btn:hover {
+  background: linear-gradient(to bottom, #f5d68a, #eeba37);
+}
+
+/* Success Popup */
+.popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-card {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 8px;
+  border: 1px solid #d5d9d9;
+  text-align: center;
+  max-width: 350px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.popup-card h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111;
+  margin-bottom: 20px;
+}
+
+/* OK button styled like Amazon's primary */
+.ok-btn {
+  background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+  border: 1px solid #a88734;
+  border-radius: 3px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111;
+}
+
+.ok-btn:hover {
+  background: linear-gradient(to bottom, #f5d68a, #eeba37);
+}

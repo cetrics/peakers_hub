@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2025 at 01:20 PM
+-- Generation Time: Sep 05, 2025 at 01:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -87,6 +87,94 @@ CREATE TABLE `delivery_addresses` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `delivery_addresses`
+--
+
+INSERT INTO `delivery_addresses` (`address_id`, `user_id`, `address_type`, `contact_name`, `contact_phone`, `address_line1`, `address_line2`, `town`, `county`, `postal_code`, `country`, `is_default`, `created_at`, `updated_at`) VALUES
+(3, 25, 'home', 'Cetric Samuel Omwembe', '0700390678', 'Kiserian Primary Road', 'Goshen Close', 'Kiserian', 'Kajiado', '2345', 'Kenya', 1, '2025-08-18 13:14:23', '2025-08-18 13:14:23'),
+(4, 26, 'home', 'Cetric', '0700391535', 'Goshen Close', 'Kaurai', 'Kiserian', 'Kajiado', '1010', 'Kenya', 1, '2025-08-18 19:15:17', '2025-08-18 19:15:17'),
+(5, 2, 'home', 'Alicia Myra', '0789345768', 'Kaurai', 'Matasia', 'Kiserian', 'Kajiado', '2345', 'Kenya', 1, '2025-08-20 15:06:32', '2025-08-20 15:06:32'),
+(6, 25, 'home', 'Richard', 'Sikika', 'Donholm', 'Savanaah Road', 'Nairobi', 'Nairobi', '220', 'Kenya', 0, '2025-08-21 11:25:37', '2025-08-21 11:25:37');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `phone_number` varchar(20) DEFAULT NULL,
+  `address_id` int(11) NOT NULL,
+  `payment_method` varchar(50) NOT NULL,
+  `total_amount` decimal(10,2) NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'Pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `order_number` varchar(6) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `phone_number`, `address_id`, `payment_method`, `total_amount`, `status`, `created_at`, `order_number`) VALUES
+(1, 25, NULL, 3, 'mpesa', 1.16, 'Success', '2025-08-18 19:56:04', '132678'),
+(2, 25, NULL, 3, 'mpesa', 1.16, 'Pending', '2025-08-20 14:51:13', '795081'),
+(3, 2, NULL, 5, 'mpesa', 1.16, 'Pending', '2025-08-20 15:07:20', '383819'),
+(5, 25, NULL, 3, 'mpesa', 1.16, 'Cancelled', '2025-08-20 16:39:34', '223877'),
+(6, 25, NULL, 3, 'mpesa', 1.16, 'archived', '2025-08-21 11:57:12', '249209'),
+(7, 25, NULL, 3, 'mpesa', 1.16, 'Pending', '2025-08-25 11:43:18', '733545');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
+(1, 1, 15, 1, 1.00),
+(2, 2, 15, 1, 1.00),
+(3, 3, 15, 1, 1.00),
+(4, 5, 15, 1, 1.00),
+(5, 6, 15, 1, 1.00),
+(6, 7, 15, 1, 1.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_tracking`
+--
+
+CREATE TABLE `order_tracking` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `description` text DEFAULT NULL,
+  `update_time` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_tracking`
+--
+
+INSERT INTO `order_tracking` (`id`, `order_id`, `status`, `description`, `update_time`) VALUES
+(1, 1, 'Out for Delivery', 'I have received', '2025-08-23 14:55:20'),
+(2, 7, 'Ordered', 'Order placed successfully', '2025-08-25 11:43:18');
+
 -- --------------------------------------------------------
 
 --
@@ -113,7 +201,7 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `category_id`, `brand`, `material`, `stock_quantity`, `image_url`, `created_at`, `discount`) VALUES
 (14, '(Renewed) Apple iPhone 15 Pro Max, 256GB, Blue Titanium - Unlocked', '6.7inch Super Retina XDR display. ProMotion technology. Always-On display. Titanium with textured matte glass back. Action button\r\nDynamic Island. A magical way to interact with iPhone. A17 Pro chip with 6-core GPU\r\nPro camera system. 48MP Main | Ultra Wide| Telephoto. Super-high-resolution photos (24MP and 48MP). Next-generation portraits with Focus and Depth Control. Up to 10x optical zoom range\r\nEmergency SOS via satellite. Crash Detection. Roadside Assistance via satellite\r\nUp to 29 hours video playback. USB-C, Supports USB 3 for up to 20x faster transfers. Face ID', 120000.00, 7, 'Apple', 'Silk', 10, NULL, '2025-08-08 14:18:57', 10.00),
-(15, ' (Renewed) Apple iPhone 14 Pro, 128GB, Space Black - Unlocked (Renewed) Apple iPhone 14 Pro, 128GB, Space Black - Unlocked', '6.1-inch Super Retina XDR display featuring Always-On & ProMotion.', 96500.00, 7, 'Apple', 'Silk', 50, NULL, '2025-08-08 14:25:11', 15.00),
+(15, ' (Renewed) Apple iPhone 14 Pro, 128GB, Space Black - Unlocked (Renewed) Apple iPhone 14 Pro, 128GB, Space Black - Unlocked', '6.1-inch Super Retina XDR display featuring Always-On & ProMotion.', 1.00, 7, 'Apple', 'Silk', 47, NULL, '2025-08-08 14:25:11', 0.00),
 (16, 'Apple iPhone 13, 128GB, Midnight - Unlocked (Renewed) Apple iPhone 13, 128GB, Midnight - Unlocked (Renewed)', 'This pre-owned product is not Apple certified, but has been professionally inspected, tested and cleaned by Amazon-qualified suppliers.\r\nThere will be no visible cosmetic imperfections when held at an arm’s length.\r\nThis product is eligible for a replacement or refund within 90 days of receipt if you are not satisfied.\r\nProduct may come in generic Box.', 660000.00, 7, 'Apple', 'Silk', 43, NULL, '2025-08-08 14:34:19', 13.00),
 (17, '(Renewed) Apple iPhone 12 Pro Max 5G, US Version, 128GB, Graphite - Unlocked', 'This phone is unlocked and compatible with any carrier of choice on GSM and CDMA networks (e.g. AT&T, T-Mobile, Sprint, Verizon, US Cellular, Cricket, Metro, Tracfone, Mint Mobile, etc.).\r\nPlease check with your carrier to verify compatibility.\r\nWhen you receive the phone, insert a SIM card from a compatible carrier. Then, turn it on, connect to Wi-Fi, and follow the on screen prompts to activate service.\r\nAccessories may not be original, but will be compatible and fully functional. Product may come in generic box.\r\nTested for battery health and guaranteed to have a minimum battery capacity of 80%.', 43000.00, 7, 'Apple', 'Silk', 21, NULL, '2025-08-08 14:39:40', 18.00),
 (18, 'Women Fashion Synthetic Leather Handbags Tote Bag Shoulder Bag Top Handle Satchel Purse Set 4pcs', 'Material: Synthetic Leather(fabric),Polyester(lining).\r\nDimension: Large handbag: Top Width: 40CM,Bottom Width：30CM. Height: 27CM, Depth: 13CM. Crossbody Bag: Width: 26CM, Height: 15CM, Depth:8CM. Cosmetic Bag: Width:19CM, Height:13CM, Depth:7CM. Total weight: About 0.95kg.Please you can refer to the size before you buy it. Thank you.', 3500.00, 10, 'Handbag', 'Leather', 15, NULL, '2025-08-08 14:45:52', 10.00),
@@ -148,8 +236,6 @@ CREATE TABLE `product_colors` (
 INSERT INTO `product_colors` (`id`, `product_id`, `color_id`) VALUES
 (64, 14, 11),
 (65, 14, 10),
-(66, 15, 11),
-(67, 15, 8),
 (68, 16, 11),
 (69, 16, 9),
 (70, 17, 11),
@@ -190,7 +276,9 @@ INSERT INTO `product_colors` (`id`, `product_id`, `color_id`) VALUES
 (105, 29, 11),
 (106, 29, 9),
 (107, 29, 10),
-(108, 29, 8);
+(108, 29, 8),
+(109, 15, 11),
+(110, 15, 8);
 
 -- --------------------------------------------------------
 
@@ -292,8 +380,6 @@ CREATE TABLE `product_sizes` (
 INSERT INTO `product_sizes` (`id`, `product_id`, `size_id`) VALUES
 (45, 14, 8),
 (46, 14, 7),
-(47, 15, 7),
-(48, 15, 8),
 (49, 16, 7),
 (50, 17, 8),
 (51, 17, 7),
@@ -322,7 +408,9 @@ INSERT INTO `product_sizes` (`id`, `product_id`, `size_id`) VALUES
 (74, 28, 8),
 (75, 28, 7),
 (76, 29, 6),
-(77, 29, 5);
+(77, 29, 5),
+(78, 15, 7),
+(79, 15, 8);
 
 -- --------------------------------------------------------
 
@@ -376,7 +464,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `first_name`, `last_name`, `phone`, `id_number`, `user_type`, `is_verified`, `date_of_birth`, `gender`, `profile_image`, `last_login`, `created_at`, `updated_at`) VALUES
-(2, 'Alicia', 'alicia@gmail.com', 'scrypt:32768:8:1$npYjMWySZoNnTSgz$61debd939a91c569860740e3916da4c828723f561d774039d9c0b23b884b269555dc4066f6ed0a57938e974a3dfa8f969725ce03f83a3b1d3231f8fea4ae9e82', 'Alicia', 'Omwembe', '719585252', '32341978', 'customer', 0, '2000-10-13', 'male', NULL, NULL, '2025-08-14 13:50:44', '2025-08-14 13:50:44'),
+(2, 'Alicia', 'alicia@gmail.com', 'scrypt:32768:8:1$npYjMWySZoNnTSgz$61debd939a91c569860740e3916da4c828723f561d774039d9c0b23b884b269555dc4066f6ed0a57938e974a3dfa8f969725ce03f83a3b1d3231f8fea4ae9e82', 'Alicia', 'Omwembe', '719585252', '32341978', 'customer', 0, '2000-10-13', 'male', NULL, '2025-08-20 16:42:30', '2025-08-14 13:50:44', '2025-08-20 16:42:30'),
 (3, 'Fadhili', 'fadhili@gmail.com', 'scrypt:32768:8:1$KLKykemkAz7OwD2I$39aeedda2675650ccd7356d7b037006e8ff770130a1aa5f20314fa7168c32e30100dfd922fd7fc2a6b9a8101f87efa9349adc847a27894306baeeca4c5834ce0', 'Fadhili', 'Ahava', '0789234768', '145678', 'customer', 0, '2025-08-22', 'male', NULL, NULL, '2025-08-14 13:53:58', '2025-08-14 13:53:58'),
 (4, 'Martin', 'martin@gmail.com', 'scrypt:32768:8:1$ewwjmmC6jeGowuOX$01b5b92115d2b7f6c5d8daee5b94cd4e37adc6db629915139ad0e06a9d2ae8341622516c7c9462f55eaf6e77d2d04b1b6ebf44b1e18945681c90d841b224b377', 'martin', 'kamau', '78903456', '60734567', 'customer', 0, '1978-02-04', 'male', NULL, NULL, '2025-08-14 13:59:55', '2025-08-14 13:59:55'),
 (5, 'Loice', 'wanjiku@gmail.com', 'scrypt:32768:8:1$DbCtWaTiWQugNBne$b17c909f94d7694298a6ff4df3de95e9c330658517daa1fb92d2265909137ec94802f1298c9873d265b8df9adadf1e4bdfe8f61940dfb1e4795e069ffe83701d', 'loice', 'wanjiku', '0789234768', '50893412', 'customer', 0, '1996-04-23', 'female', NULL, NULL, '2025-08-14 14:21:00', '2025-08-14 14:21:00'),
@@ -399,8 +487,8 @@ INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `first_name`, `
 (22, 'Milah', 'milah@gmail.com', 'scrypt:32768:8:1$KzrQXCXc42gVz7XV$2e73c5e103562b5b287e44525a09e9fddb8765fa8fd4feff57f76c6d510b9e2574b96fabc31bcd9e998ef7a007f40bb8d73d2984426337e71f6af89d4e6ff802', 'milah', 'muli', '767564345', '106745', 'customer', 0, '2000-05-05', 'female', NULL, NULL, '2025-08-14 18:44:42', '2025-08-14 18:44:42'),
 (23, 'Nalia', 'nalia@gmail.com', 'scrypt:32768:8:1$hvCqcmBTQwH5F0Mr$27e3d9da8aca5d03e53d621066a46007653c143d43a8327c5ec889fd261ae7a52335ccde3ae3fe5e961bfb668e381cbb804955b5a20cd29e17d609bda4d463d9', 'nalia', 'mwangi', '790456789', '407867', 'customer', 0, '1990-03-03', 'female', NULL, NULL, '2025-08-14 18:58:26', '2025-08-14 18:58:26'),
 (24, 'Myra', 'myra@gmail.com', 'scrypt:32768:8:1$4mRFrQLTFKrTYnWL$a8da3fc72a5bc550a280742c2aef1d52cf0d55815718df68cb158c391c88faf8812268c3b0558fcbb71dd24ceaec0607864dec7ca279749c3ca8bee8a4ca2a8f', 'myra', 'Omwembe', '789034567', '102345', 'customer', 0, '1997-06-06', 'female', NULL, NULL, '2025-08-14 19:08:56', '2025-08-14 19:08:56'),
-(25, 'Joy', 'joy@gmail.com', 'scrypt:32768:8:1$Smeq5JjkCYSTJBg8$589b5f3d6f73984f9523ce4f705173a47339a7087d93307f955e20131a88c794778d8ee75bbbfe89249f0c87949bad82fd70a16af539435c923100d21156cd57', 'joy', 'mima', '789023456', '323456', 'customer', 0, '2004-09-19', 'female', NULL, '2025-08-16 11:15:25', '2025-08-14 19:11:44', '2025-08-16 11:15:25'),
-(26, 'cetric', 'scetric@gmail.com', 'scrypt:32768:8:1$rBbMVxWNmtzFPU33$5493cc4a74d56077647155c07d512919aa2bfef1277b0bedee906c40da77d3e67abf3a08817d957d181e3e940886922f7f8b4bf8b3636cc3cac489d0b6222b14', 'cetric', 'Admin', '700391535', '378956', 'admin', 0, '1990-06-06', 'male', NULL, '2025-08-16 11:14:33', '2025-08-15 20:12:52', '2025-08-16 11:14:33');
+(25, 'Joy', 'joy@gmail.com', 'scrypt:32768:8:1$Smeq5JjkCYSTJBg8$589b5f3d6f73984f9523ce4f705173a47339a7087d93307f955e20131a88c794778d8ee75bbbfe89249f0c87949bad82fd70a16af539435c923100d21156cd57', 'joy', 'mima', '789023456', '323456', 'customer', 0, '2004-09-19', 'female', NULL, '2025-08-21 11:56:46', '2025-08-14 19:11:44', '2025-08-21 11:56:46'),
+(26, 'cetric', 'scetric@gmail.com', 'scrypt:32768:8:1$rBbMVxWNmtzFPU33$5493cc4a74d56077647155c07d512919aa2bfef1277b0bedee906c40da77d3e67abf3a08817d957d181e3e940886922f7f8b4bf8b3636cc3cac489d0b6222b14', 'cetric', 'Admin', '700391535', '378956', 'admin', 0, '1990-06-06', 'male', NULL, '2025-08-18 19:12:30', '2025-08-15 20:12:52', '2025-08-18 19:12:30');
 
 --
 -- Indexes for dumped tables
@@ -426,6 +514,27 @@ ALTER TABLE `colors`
 ALTER TABLE `delivery_addresses`
   ADD PRIMARY KEY (`address_id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `order_number` (`order_number`);
+
+--
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
+-- Indexes for table `order_tracking`
+--
+ALTER TABLE `order_tracking`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`);
 
 --
 -- Indexes for table `products`
@@ -497,7 +606,25 @@ ALTER TABLE `colors`
 -- AUTO_INCREMENT for table `delivery_addresses`
 --
 ALTER TABLE `delivery_addresses`
-  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `order_tracking`
+--
+ALTER TABLE `order_tracking`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -509,7 +636,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `product_colors`
 --
 ALTER TABLE `product_colors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `product_images`
@@ -527,7 +654,7 @@ ALTER TABLE `product_ratings`
 -- AUTO_INCREMENT for table `product_sizes`
 --
 ALTER TABLE `product_sizes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT for table `sizes`
@@ -550,6 +677,18 @@ ALTER TABLE `users`
 --
 ALTER TABLE `delivery_addresses`
   ADD CONSTRAINT `delivery_addresses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `order_tracking`
+--
+ALTER TABLE `order_tracking`
+  ADD CONSTRAINT `order_tracking_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
 
 --
 -- Constraints for table `products`

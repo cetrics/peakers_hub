@@ -23,7 +23,7 @@ const CartPage = () => {
     if (storedSelected) {
       setSelectedItems(storedSelected);
     } else {
-      setSelectedItems(stored.map((item) => item.id));
+      setSelectedItems([]); // nothing pre-selected
     }
 
     const storedSaved = JSON.parse(localStorage.getItem("savedItems")) || [];
@@ -97,6 +97,13 @@ const CartPage = () => {
     const updatedCart = [...cart, item];
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+    // ✅ Make sure it's also selected
+    setSelectedItems((prev) => [...prev, item.id]);
+    localStorage.setItem(
+      "selectedItems",
+      JSON.stringify([...selectedItems, item.id])
+    );
 
     // ✅ Ensure mainImages is updated so the image appears immediately
     setMainImages((prev) => ({
@@ -489,6 +496,13 @@ const CartPage = () => {
                         localStorage.setItem("cart", JSON.stringify(cart));
                         setCart(cart); // ✅ add this after updating localStorage
                         // after you update `cart` and call setCart(cart):
+                        // ✅ Select the new product automatically
+                        setSelectedItems((prev) => [...prev, productToAdd.id]);
+                        localStorage.setItem(
+                          "selectedItems",
+                          JSON.stringify([...selectedItems, productToAdd.id])
+                        );
+
                         setMainImages((prev) => ({
                           ...prev,
                           [productToAdd.id]:
@@ -529,9 +543,14 @@ const CartPage = () => {
       <div className="cart-right">
         <div className="summary-box">
           <p>
-            Subtotal ({selectedItems.length} of {cart.length} items selected):{" "}
-            <strong>KES {totalPrice.toLocaleString()}</strong>
+            Subtotal (
+            {cart
+              .filter((item) => selectedItems.includes(item.id))
+              .reduce((sum, item) => sum + (item.quantity || 1), 0)}
+            of {cart.reduce((sum, item) => sum + (item.quantity || 1), 0)}
+            items selected): <strong>KES {totalPrice.toLocaleString()}</strong>
           </p>
+
           <button
             className={`checkout-btn ${
               !isAuthenticated() ? "checkout-btn-guest" : ""
@@ -544,15 +563,19 @@ const CartPage = () => {
                 toast.info("Please sign in to proceed to checkout", {
                   position: "top-right",
                 });
-                navigate("/login?from=/cart");
+                navigate("/login?from=/checkout"); // keep query param, not state
                 return;
               }
               navigate("/checkout");
             }}
           >
             {isAuthenticated()
-              ? `Proceed to Checkout (${selectedItems.length})`
-              : `Sign In to Checkout (${selectedItems.length})`}
+              ? `Proceed to Checkout (${cart
+                  .filter((item) => selectedItems.includes(item.id))
+                  .reduce((sum, item) => sum + (item.quantity || 1), 0)})`
+              : `Sign In to Checkout (${cart
+                  .filter((item) => selectedItems.includes(item.id))
+                  .reduce((sum, item) => sum + (item.quantity || 1), 0)})`}
           </button>
           {savedItems.length > 0 && (
             <div className="saved-items">

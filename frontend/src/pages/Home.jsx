@@ -3,6 +3,14 @@ import "./css/HomePage.css";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { toast } from "react-toastify";
+import SidebarMenu from "./SidebarMenu";
+import { useLocation } from "react-router-dom";
+import SearchPage from "./SearchPage";
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 const slides = [
   {
     title: "Watches",
@@ -26,7 +34,7 @@ const CategorySection = ({ category, products, renderProductCard }) => {
   const [showAll, setShowAll] = useState(false);
 
   return (
-    <section className="product-section">
+    <section id={`category-${category}`} className="product-section">
       <h2>{category}</h2>
       <div className="product-grid">
         {(showAll ? products : products.slice(0, 4)).map(renderProductCard)}
@@ -54,6 +62,21 @@ const HomePage = () => {
   const [topDeals, setTopDeals] = useState([]);
   const [otherProducts, setOtherProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
+  const query = useQuery();
+
+  useEffect(() => {
+    const categoryToScroll = query.get("scrollTo") || location.state?.scrollTo;
+    if (categoryToScroll) {
+      setTimeout(() => {
+        const el = document.getElementById(`category-${categoryToScroll}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    }
+  }, [location.search, location.state]);
 
   useEffect(() => {
     fetch("/api/products")
@@ -275,9 +298,18 @@ const HomePage = () => {
             } else {
               cart.push({ ...product, quantity: 1 });
             }
-
             // Save to localStorage
             localStorage.setItem("cart", JSON.stringify(cart));
+            // ✅ Ensure product is also marked as selected
+            const selectedItems =
+              JSON.parse(localStorage.getItem("selectedItems")) || [];
+            if (!selectedItems.includes(product.id)) {
+              selectedItems.push(product.id);
+              localStorage.setItem(
+                "selectedItems",
+                JSON.stringify(selectedItems)
+              );
+            }
 
             // ✅ Update cart count in DOM
             const cartCountEl = document.querySelector(".cart-count");
@@ -297,7 +329,6 @@ const HomePage = () => {
               closeOnClick: true,
               pauseOnHover: true,
               draggable: true,
-              className: "amazon-toast-success",
             });
           }}
         >
@@ -308,99 +339,105 @@ const HomePage = () => {
   };
 
   return (
-    <div className="homepage">
-      {/* Hero Section */}
-      <section className="hero-banner">
-        <div className="hero-image-container">
-          <img
-            src={slides[currentSlide].image}
-            alt={slides[currentSlide].title}
-            className={`hero-image ${isTransitioning ? "fading" : ""} ${
-              imageLoaded ? "loaded" : ""
-            }`}
-            loading="eager"
-            onLoad={() => setImageLoaded(true)}
-            onError={(e) => {
-              console.error("Failed to load image:", e.target.src);
-              e.target.src =
-                "https://via.placeholder.com/1200x400?text=Image+Not+Available";
-            }}
-          />
-          {!imageLoaded && (
-            <div className="image-loading-placeholder">
-              <div className="loading-spinner"></div>
-            </div>
-          )}
-        </div>
-
-        <div className="hero-caption">
-          <h2>{slides[currentSlide].title}</h2>
-          <p>{slides[currentSlide].description}</p>
-        </div>
-
-        <div className="hero-controls">
-          <button
-            onClick={prevSlide}
-            aria-label="Previous slide"
-            className="hero-control-btn"
-          >
-            &#10094;
-          </button>
-          <button
-            onClick={nextSlide}
-            aria-label="Next slide"
-            className="hero-control-btn"
-          >
-            &#10095;
-          </button>
-        </div>
-
-        <div className="slide-indicators">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${index === currentSlide ? "active" : ""}`}
-              onClick={() => {
-                if (!isTransitioning && index !== currentSlide) {
-                  setIsTransitioning(true);
-                  setImageLoaded(false);
-                  setCurrentSlide(index);
-                }
+    <>
+      <div className="homepage">
+        {/* Hero Section */}
+        <section className="hero-banner">
+          <div className="hero-image-container">
+            <img
+              src={slides[currentSlide].image}
+              alt={slides[currentSlide].title}
+              className={`hero-image ${isTransitioning ? "fading" : ""} ${
+                imageLoaded ? "loaded" : ""
+              }`}
+              loading="eager"
+              onLoad={() => setImageLoaded(true)}
+              onError={(e) => {
+                console.error("Failed to load image:", e.target.src);
+                e.target.src =
+                  "https://via.placeholder.com/1200x400?text=Image+Not+Available";
               }}
-              aria-label={`Go to slide ${index + 1}`}
+            />
+            {!imageLoaded && (
+              <div className="image-loading-placeholder">
+                <div className="loading-spinner"></div>
+              </div>
+            )}
+          </div>
+
+          <div className="hero-caption">
+            <h2>{slides[currentSlide].title}</h2>
+            <p>{slides[currentSlide].description}</p>
+          </div>
+
+          <div className="hero-controls">
+            <button
+              onClick={prevSlide}
+              aria-label="Previous slide"
+              className="hero-control-btn"
+            >
+              &#10094;
+            </button>
+            <button
+              onClick={nextSlide}
+              aria-label="Next slide"
+              className="hero-control-btn"
+            >
+              &#10095;
+            </button>
+          </div>
+
+          <div className="slide-indicators">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                className={`indicator ${
+                  index === currentSlide ? "active" : ""
+                }`}
+                onClick={() => {
+                  if (!isTransitioning && index !== currentSlide) {
+                    setIsTransitioning(true);
+                    setImageLoaded(false);
+                    setCurrentSlide(index);
+                  }
+                }}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Top Deals Section */}
+        <section id="category-Top Deals" className="product-section">
+          <h2>Top Deals</h2>
+          <div className="product-grid">
+            {loading
+              ? Array.from({ length: 4 }).map((_, i) =>
+                  renderProductCard({}, i)
+                )
+              : topDeals.map(renderProductCard)}
+          </div>
+        </section>
+
+        {/* Grouped Other Products by Category */}
+        {!loading &&
+          Object.entries(
+            otherProducts.reduce((acc, product) => {
+              const category = product.category_name || "Uncategorized";
+              if (!acc[category]) acc[category] = [];
+              acc[category].push(product);
+              return acc;
+            }, {})
+          ).map(([category, products]) => (
+            <CategorySection
+              key={category}
+              category={category}
+              products={products}
+              renderProductCard={renderProductCard}
             />
           ))}
-        </div>
-      </section>
-
-      {/* Top Deals Section */}
-      <section className="product-section">
-        <h2>Top Deals</h2>
-        <div className="product-grid">
-          {loading
-            ? Array.from({ length: 4 }).map((_, i) => renderProductCard({}, i))
-            : topDeals.map(renderProductCard)}
-        </div>
-      </section>
-
-      {/* Grouped Other Products by Category */}
-      {!loading &&
-        Object.entries(
-          otherProducts.reduce((acc, product) => {
-            const category = product.category_name || "Uncategorized";
-            if (!acc[category]) acc[category] = [];
-            acc[category].push(product);
-            return acc;
-          }, {})
-        ).map(([category, products]) => (
-          <CategorySection
-            key={category}
-            category={category}
-            products={products}
-            renderProductCard={renderProductCard}
-          />
-        ))}
-    </div>
+      </div>
+    </>
   );
 };
 

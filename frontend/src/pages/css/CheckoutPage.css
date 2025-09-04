@@ -96,6 +96,16 @@
   cursor: pointer;
 }
 
+.payment-method-m {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .payment-method:hover {
   background: #f7f7f7;
 }
@@ -155,4 +165,130 @@
 
 .lock-icon {
   font-size: 12px;
+}
+
+/* Backdrop */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+/* Modal card */
+.modal-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  padding: 30px 25px;
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal title */
+.modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #111;
+}
+
+/* Form groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #333;
+}
+/* Override default input style when inside phone-input-wrapper */
+.phone-input-wrapper input[type="text"] {
+  border: none; /* remove inner border */
+  border-radius: 0; /* prevent double rounding */
+  outline: none;
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.phone-input-wrapper input[type="text"]:focus {
+  border: none; /* no focus border inside wrapper */
+  outline: none;
+}
+
+/* Checkbox */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+.checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+/* Buttons */
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+.save-btn {
+  background-color: #ffd814;
+  border: 1px solid #fcd200;
+  color: #111;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.save-btn:hover {
+  background-color: #f7ca00;
+}
+.cancel-btn {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+/* Country code select */
+.country-code {
+  width: 70px !important; /* small width */
+  background: white !important;
+  border-right: none !important; /* removes right border */
 }

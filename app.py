@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify, render_template,Blueprint
+from flask import Flask, request, jsonify, render_template,Blueprint,current_app,redirect, url_for
 import jwt
 import datetime
 from functools import wraps
@@ -10,9 +10,20 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 from flask_cors import CORS
+from pyngrok import ngrok
+from mpesa import lipa_na_mpesa_online, transaction_status
+import random
+from collections import defaultdict
+
+
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
+public_url = ngrok.connect(5000).public_url
+app.config["CALLBACK_URL"] = f"{public_url}/callback"
+print(f"Ngrok URL: {public_url}")
+print(f"Callback URL: {app.config['CALLBACK_URL']}")
+
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 # Correct path for upload folder: static/uploads
 UPLOAD_FOLDER = os.path.join(app.static_folder, "uploads")
@@ -26,6 +37,8 @@ app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 
 # Allowed file extensions
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+
+address_bp = Blueprint("address_bp", __name__)
 
 
 # ✅ MySQL Configuration
@@ -71,15 +84,6 @@ def get_db_connection():
     except mysql.connector.Error as err:
         print(f"❌ Database connection failed: {err}")
         return None
-
-# Mock admin data
-ADMIN_CREDENTIALS = {
-    "admin@peakershub.com": {
-        "password": "securepassword123",
-        "name": "Admin User"
-    }
-}
-
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -213,6 +217,7 @@ def login():
         token = jwt.encode({
             'id': user['id'],
             'email': user['email'],
+            'phone': user['phone'],
             'role': role,
             'exp': exp_time
         }, app.config['SECRET_KEY'])
@@ -232,7 +237,8 @@ def login():
             'token': token,
             'role': role,
             'redirect': next_page,
-            'name': f"{user['first_name']} {user['last_name']}"
+            'name': f"{user['first_name']} {user['last_name']}",
+            'phone': user['phone']
         })
 
     except mysql.connector.Error as err:
@@ -699,8 +705,444 @@ def add_category():
         cursor.close()
         conn.close()
 
-app.register_blueprint(auth_bp, url_prefix='/api/auth')        
 
+
+# ✅ Fetch all addresses for a user
+@address_bp.route("/<int:user_id>", methods=["GET"])
+def get_addresses(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM delivery_addresses WHERE user_id = %s", (user_id,))
+    addresses = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(addresses)
+
+@address_bp.route("/", methods=["POST"])
+def add_address():
+    # 🔹 Get token from request header
+    auth_header = request.headers.get("Authorization", "")
+    token = auth_header.split("Bearer ")[-1] if auth_header.startswith("Bearer ") else None
+
+    if not token:
+        return jsonify({"error": "Token is missing"}), 401
+
+    try:
+        # 🔹 Decode token and extract user_id
+        payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
+        user_id = payload["id"]
+    except jwt.ExpiredSignatureError:
+        return jsonify({"error": "Token has expired"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"error": "Invalid token"}), 401
+
+    # 🔹 Get request body
+    data = request.json
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO delivery_addresses
+        (user_id, address_type, contact_name, contact_phone, address_line1, 
+         address_line2, town, county, postal_code, country, is_default, created_at, updated_at)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+    """, (
+        user_id,  # ✅ taken from token
+        data.get("address_type", "Home"),
+        data["contact_name"],
+        data["contact_phone"],
+        data["address_line1"],
+        data.get("address_line2", ""),
+        data["town"],
+        data["county"],
+        data["postal_code"],
+        data["country"],
+        data.get("is_default", False),
+        datetime.datetime.now(),
+        datetime.datetime.now(),
+    ))
+
+    conn.commit()
+    new_id = cursor.lastrowid
+    cursor.close()
+    conn.close()
+
+    return jsonify({"message": "Address added successfully", "address_id": new_id}), 201
+
+
+# --- STK Push Endpoint ---
+@app.route('/test-stkpush', methods=['POST'])
+def test_stkpush():
+    data = request.get_json()  # Accept JSON
+    phone = data.get("phone")
+    amount = data.get("amount")
+
+    if not phone or not amount:
+        return jsonify({"error": "Missing phone or amount"}), 400
+
+    result = lipa_na_mpesa_online(phone, int(amount), app.config["CALLBACK_URL"])
+    checkout_id = result.get("CheckoutRequestID")
+    if checkout_id:
+        transaction_status[checkout_id] = "Pending"
+    return jsonify({"checkout_id": checkout_id})
+
+
+# --- Callback Endpoint ---
+@app.route('/callback', methods=['POST'])
+def mpesa_callback():
+    data = request.get_json()
+    try:
+        stk_callback = data['Body']['stkCallback']
+        checkout_id = stk_callback['CheckoutRequestID']
+        result_code = stk_callback['ResultCode']
+
+        if result_code == 0:
+            status = "Success"
+        elif result_code == 1032:
+            status = "Cancelled"
+        else:
+            status = "Failed"
+
+        transaction_status[checkout_id] = status
+        return jsonify({"result": "Callback handled"}), 200
+
+    except Exception as e:
+        print(f"❌ Error handling callback: {e}")
+        return jsonify({"error": "Bad callback format"}), 400
+
+# --- Check Status API ---
+@app.route('/check-status/<checkout_id>')
+def check_status(checkout_id):
+    status = transaction_status.get(checkout_id, "Pending")
+    return jsonify({"status": status})
+
+@app.route("/api/orders/<int:user_id>")
+def get_user_orders(user_id):
+    conn = get_db_connection()
+    if conn is None:
+        return jsonify({"error": "DB connection failed"}), 500
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+
+        # 1) Get orders with a summary string (like your original GROUP_CONCAT)
+        cursor.execute(
+            """
+            SELECT 
+                o.id,
+                o.order_number,
+                o.total_amount,
+                o.payment_method,
+                o.status,
+                o.created_at,
+                (
+                    SELECT GROUP_CONCAT(CONCAT(p.name, ' x', oi.quantity) SEPARATOR ', ')
+                    FROM order_items oi
+                    JOIN products p ON p.id = oi.product_id
+                    WHERE oi.order_id = o.id
+                ) AS items_summary
+            FROM orders o
+            WHERE o.user_id = %s
+            ORDER BY o.created_at DESC
+            """,
+            (user_id,),
+        )
+        orders = cursor.fetchall()
+        if not orders:
+            return jsonify([])
+
+        # 2) Fetch order items with the first image per product
+        order_ids = [o["id"] for o in orders]
+        placeholders = ",".join(["%s"] * len(order_ids))
+        cursor.execute(
+            f"""
+            SELECT 
+                oi.order_id,
+                p.id AS product_id,
+                p.name AS title,
+                oi.quantity,
+                (
+                    SELECT pi.image_filename
+                    FROM product_images pi
+                    WHERE pi.product_id = p.id
+                    ORDER BY pi.id ASC
+                    LIMIT 1
+                ) AS image_filename
+            FROM order_items oi
+            JOIN products p ON p.id = oi.product_id
+            WHERE oi.order_id IN ({placeholders})
+            ORDER BY oi.order_id, oi.id
+            """,
+            order_ids,
+        )
+        rows = cursor.fetchall()
+
+        # 3) Build items array per order and attach to orders
+        by_order = defaultdict(list)
+        for r in rows:
+            img_file = r.get("image_filename")
+            image_url = url_for("static", filename=f"uploads/{img_file}") if img_file else None
+            by_order[r["order_id"]].append({
+                "product_id": r["product_id"],
+                "title": r["title"],
+                "quantity": r["quantity"],
+                "image": image_url,
+            })
+
+        for o in orders:
+            o["items"] = by_order.get(o["id"], [])
+            o.pop("id", None)  # hide internal DB id
+
+        return jsonify(orders)
+    except Error as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
+
+@app.route("/api/orders/details/<string:order_number>")
+def get_order_details(order_number):
+    conn = get_db_connection()
+    if conn is None:
+        return jsonify({"error": "DB connection failed"}), 500
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+
+        # 1) Get the order
+        cursor.execute(
+            """
+            SELECT 
+                o.id,
+                o.order_number,
+                o.total_amount,
+                o.payment_method,
+                o.status,
+                o.created_at
+            FROM orders o
+            WHERE o.order_number = %s
+            """,
+            (order_number,),
+        )
+        order = cursor.fetchone()
+        if not order:
+            return jsonify({"error": "Order not found"}), 404
+
+        # 2) Get the order items
+        cursor.execute(
+            """
+            SELECT 
+                p.id AS product_id,
+                p.name AS title,
+                oi.quantity,
+                (
+                    SELECT pi.image_filename
+                    FROM product_images pi
+                    WHERE pi.product_id = p.id
+                    ORDER BY pi.id ASC
+                    LIMIT 1
+                ) AS image_filename
+            FROM order_items oi
+            JOIN products p ON p.id = oi.product_id
+            WHERE oi.order_id = %s
+            """,
+            (order["id"],),
+        )
+        items = cursor.fetchall()
+
+        # 3) Attach image URLs
+        for item in items:
+            if item["image_filename"]:
+                item["image"] = url_for(
+                    "static", filename=f"uploads/{item['image_filename']}"
+                )
+            else:
+                item["image"] = None
+            item.pop("image_filename", None)
+
+        order["items"] = items
+        order.pop("id", None)  # don’t leak DB id
+
+        return jsonify(order)
+
+    except Error as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route("/api/orders/<order_number>/tracking", methods=["GET"])
+def get_order_tracking(order_number):
+    conn = get_db_connection()
+    if conn is None:
+        return jsonify({"error": "DB connection failed"}), 500
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+
+        # get order_id from orders table
+        cursor.execute("SELECT id FROM orders WHERE order_number = %s", (order_number,))
+        order = cursor.fetchone()
+        if not order:
+            return jsonify({"error": "Order not found"}), 404
+
+        # fetch tracking history
+        cursor.execute(
+            """
+            SELECT status, description, update_time
+            FROM order_tracking
+            WHERE order_id = %s
+            ORDER BY update_time ASC
+            """,
+            (order["id"],),
+        )
+        tracking = cursor.fetchall()
+
+        # current_status is the latest entry if any
+        current_status = tracking[-1]["status"] if tracking else "Ordered"
+
+        response = {
+            "current_status": current_status,
+            "expected_delivery": None,  # or calculate from created_at if needed
+            "updates": tracking,
+        }
+
+        return jsonify(response)
+    except Error as e:
+        print("Backend error:", str(e))  # log in terminal
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route("/api/orders/<int:order_id>/cancel", methods=["PUT"])
+def cancel_order(order_id):
+    conn = get_db_connection()
+    if conn is None:
+        return jsonify({"error": "DB connection failed"}), 500
+    try:
+        cursor = conn.cursor()
+
+        # update status to cancelled
+        cursor.execute(
+            "UPDATE orders SET status = %s WHERE id = %s",
+            ("cancelled", order_id),
+        )
+        conn.commit()
+
+        return jsonify({"success": True, "order_id": order_id, "status": "cancelled"})
+    except Error as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route("/api/orders/<string:order_number>/archive", methods=["PUT"])
+def archive_order(order_number):
+    conn = get_db_connection()
+    if conn is None:
+        return jsonify({"error": "DB connection failed"}), 500
+    try:
+        cursor = conn.cursor()
+        cursor.execute("UPDATE orders SET status = %s WHERE order_number = %s", ("archived", order_number))
+        conn.commit()
+        return jsonify({"success": True, "order_number": order_number, "status": "archived"})
+    except Error as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+def generate_order_number():
+    return str(random.randint(100000, 999999))  # 6-digit random number
+
+
+@app.route("/api/orders", methods=["POST"])
+def create_order():
+    data = request.json
+    user_id = data.get("user_id")
+    address_id = data.get("address_id")
+    payment_method = data.get("payment_method")
+    total_amount = data.get("total_amount")
+    cart_items = data.get("cart_items", [])
+
+    if not user_id or not address_id or not payment_method or not total_amount:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    conn = get_db_connection()
+    if conn is None:
+        return jsonify({"error": "DB connection failed"}), 500
+
+    try:
+        cursor = conn.cursor()
+        
+        # ✅ Generate a unique order_number with retry
+        max_attempts = 5
+        for attempt in range(max_attempts):
+            order_number = generate_order_number()
+            cursor.execute("SELECT id FROM orders WHERE order_number = %s", (order_number,))
+            if not cursor.fetchone():
+                break
+        else:
+            return jsonify({"error": "Failed to generate unique order number"}), 500
+
+        # Insert into orders table
+        cursor.execute(
+            """
+            INSERT INTO orders (user_id, address_id, payment_method, total_amount, status, created_at, order_number)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """,
+            (user_id, address_id, payment_method, total_amount, "Pending", datetime.datetime.now(), order_number)
+        )
+        order_id = cursor.lastrowid
+
+        # ✅ Insert default tracking step (Ordered)
+        cursor.execute(
+            """
+            INSERT INTO order_tracking (order_id, status, update_time, description)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (order_id, "Ordered", datetime.datetime.now(), "Order placed successfully")
+        )
+
+        # Insert each cart item into order_items and update stock
+        for item in cart_items:
+            cursor.execute(
+                """
+                INSERT INTO order_items (order_id, product_id, quantity, price)
+                VALUES (%s, %s, %s, %s)
+                """,
+                (order_id, item["id"], item["quantity"], item["price"])
+            )
+
+            # ✅ Deduct stock from products table
+            cursor.execute(
+                """
+                UPDATE products
+                SET stock_quantity = stock_quantity - %s
+                WHERE id = %s
+                """,
+                (item["quantity"], item["id"])
+            )
+
+        conn.commit()
+        return jsonify({"success": True, "order_id": order_id, "order_number": order_number}), 201
+
+    except Exception as e:
+        conn.rollback()
+        print("Error creating order:", e)
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
+app.register_blueprint(auth_bp, url_prefix='/api/auth')  
+app.register_blueprint(address_bp, url_prefix="/api/addresses")
 
 if __name__ == '__main__':
     app.run(debug=True)
+    

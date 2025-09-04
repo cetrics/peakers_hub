@@ -1,0 +1,25 @@
+.amazon-toast {
+  border: 1px solid #d1e7dd; /* light green border */
+  background: #f0fdf4 !important; /* pale Amazon-like green */
+  color: #1a1a1a !important; /* dark text */
+  font-size: 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 12px;
+}
+
+.amazon-toast-body {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.amazon-toast-body strong {
+  font-weight: 600;
+}
+
+.amazon-toast a {
+  color: #2a5298;
+  text-decoration: underline;
+  font-size: 13px;
+}

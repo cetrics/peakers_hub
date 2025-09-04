@@ -23,7 +23,7 @@ body {
 .logo {
   font-size: 22px;
   font-weight: bold;
-  color: #f0c14b;
+  color: #ff9900;
 }
 .logo span {
   color: white;
@@ -67,7 +67,7 @@ body {
   border: none;
 }
 .search-bar button {
-  background-color: #f3a847;
+  background-color: #ff9900;
   border: none;
   padding: 0 15px;
   cursor: pointer;
@@ -147,12 +147,12 @@ body {
 }
 
 .nav-section ul li:hover {
-  color: #f0c14b;
+  color: #ff9900;
 }
 .logo {
   font-size: 22px;
   font-weight: bold;
-  color: #f0c14b;
+  color: #ff9900;
 }
 .logo span {
   color: white;
@@ -178,7 +178,7 @@ body {
 }
 
 .account-link:hover .account {
-  color: #f0c14b; /* optional hover color */
+  color: #ff9900; /* optional hover color */
 }
 
 .logo-link {
@@ -192,7 +192,7 @@ body {
 }
 
 .logo-link:hover .logo {
-  color: #f0c14b; /* optional hover effect */
+  color: #ff9900; /* optional hover effect */
 }
 .hide {
   display: none !important;
@@ -201,3 +201,7 @@ body {
 body.login-page .main-content {
   margin-top: 0 !important;
 }
+.nav-section ul li span {
+  cursor: pointer;
+}
+

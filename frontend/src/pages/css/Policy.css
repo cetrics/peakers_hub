@@ -1,0 +1,69 @@
+.policy-container {
+  font-family: "Amazon Ember", Arial, sans-serif;
+  color: #111;
+  line-height: 1.6;
+}
+
+/* Hero */
+.policy-hero {
+  background: #232f3e;
+  color: #fff;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.policy-hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.policy-hero p {
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Content */
+.policy-content {
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.policy-section {
+  background: #fff;
+  margin-bottom: 25px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.policy-section h2 {
+  color: #232f3e;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.policy-section p {
+  font-size: 1rem;
+  color: #333;
+}
+
+.policy-section ul {
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.policy-section li {
+  margin: 6px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .policy-hero h1 {
+    font-size: 2rem;
+  }
+  .policy-content {
+    padding: 20px;
+  }
+}

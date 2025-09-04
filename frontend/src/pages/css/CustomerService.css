@@ -1,0 +1,115 @@
+.cs-container {
+  font-family: "Amazon Ember", Arial, sans-serif;
+  color: #111;
+}
+
+/* Hero */
+.cs-hero {
+  background: #232f3e;
+  color: #fff;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.cs-hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.cs-hero p {
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Grid */
+.cs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  padding: 40px 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.cs-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  text-align: center;
+}
+
+.cs-card:hover {
+  transform: translateY(-4px);
+}
+
+.cs-card h2 {
+  color: #232f3e;
+  margin-bottom: 12px;
+}
+
+.cs-card p {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.cs-btn {
+  background: #f90;
+  border: none;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.cs-btn:hover {
+  background: #e68a00;
+}
+
+/* Contact Section */
+.cs-contact {
+  background: #f8f9fa;
+  margin: 40px 20px;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cs-contact h2 {
+  margin-bottom: 12px;
+  color: #232f3e;
+}
+
+.cs-contact ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+.cs-contact li {
+  margin: 8px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .cs-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .cs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-hero h1 {
+    font-size: 2rem;
+  }
+}

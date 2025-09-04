@@ -39,8 +39,11 @@
         <select class="search-select">
           <option>All</option>
         </select>
-        <input type="text" placeholder="Search Peakers Hub" />
+        <input id="header-search-input" type="text" placeholder="Search Peakers Hub" />
         <button><i class="fa-solid fa-search"></i></button>
+        </div>
+  <div id="header-search-suggestions" class="search-suggestions"></div>
+</div>
       </div>
 
       <div class="nav-options">
@@ -56,10 +59,12 @@
           </div>
         </a>
 
-        <div class="orders">
-          <small>Returns</small><br />
-          <strong>& Orders</strong>
-        </div>
+        <a href="/order-confirmation" id="auth-link" class="account-link">
+          <div class="orders">
+            <small>Returns</small><br />
+            <strong>& Orders</strong>
+          </div></a
+        >
 
         <div class="cart" onclick="window.location.href='/cart'">
           <i class="fa-solid fa-shopping-cart"></i>
@@ -68,16 +73,21 @@
       </div>
     </header>
     <nav class="nav-section">
-      <ul>
-        <li><i class="fa-solid fa-bars"></i> All</li>
-        <li>Today's Deals</li>
-        <li>Shop</li>
-        <li>Gift Cards</li>
-        <li>Customer Service</li>
-        <li>Trusted companies</li>
-        <li>Our Policy</li>
-      </ul>
-    </nav>
+  <ul>
+    <li id="all-menu-btn">
+      <i class="fa-solid fa-bars"></i> All
+    </li>
+    <li>
+  <span onclick="window.location.href='/?scrollTo=Top Deals'">Today's Deals</span>
+</li>
+
+    <li><a href="/customer-service" class="account-link">Customer Service</a></li>
+    <li><a href="/trusted-companies" class="account-link">Trusted companies</a></li>
+    <li><a href="/policy" class="account-link">Our Policy</a></li>
+    <li><a href="/contact-us" class="account-link">Contact Us</a></li>
+  </ul>
+</nav>
+
     <div id="loader" class="page-loader">
       <div class="spinner"></div>
     </div>
@@ -95,7 +105,6 @@
             <li><a href="/cart">About Us</a></li>
             <li><a href="#">Careers</a></li>
             <li><a href="#">Press Releases</a></li>
-            <li><a href="#">Peakers Hub Science</a></li>
           </ul>
         </div>
 
@@ -104,25 +113,13 @@
           <ul>
             <li><a href="#">Sell products on Peakers Hub</a></li>
             <li><a href="#">Sell on Peakers Hub Business</a></li>
-            <li><a href="#">Become an Affiliate</a></li>
             <li><a href="#">Advertise Your Products</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-column">
-          <h3>Payment Products</h3>
-          <ul>
-            <li><a href="#">Peakers Hub Business Card</a></li>
-            <li><a href="#">Shop with Points</a></li>
-            <li><a href="#">Reload Your Balance</a></li>
-            <li><a href="#">Peakers Hub Currency Converter</a></li>
           </ul>
         </div>
 
         <div class="footer-column">
           <h3>Let Us Help You</h3>
           <ul>
-            <li><a href="#">Peakers Hub and COVID-19</a></li>
             <li><a href="#">Your Account</a></li>
             <li><a href="#">Your Orders</a></li>
             <li><a href="#">Shipping Rates & Policies</a></li>
@@ -144,20 +141,18 @@
         </div>
 
         <div class="footer-currency">
-          <i class="fa-solid fa-dollar-sign"></i>
-          <span>USD - U.S. Dollar</span>
-        </div>
+  <i class="fa-solid fa-shilling-sign"></i>
+  <span>KES - Kenyan Shilling</span>
+</div>
 
-        <div class="footer-country">
-          <img
-            src="https://flagcdn.com/us.svg"
-            alt="United States"
-            width="20"
-          />
-          <span>United States</span>
-        </div>
-      </div>
-
+<div class="footer-country">
+  <img
+    src="https://flagcdn.com/ke.svg"
+    alt="Kenya"
+    width="20"
+  />
+  <span>Kenya</span>
+</div>
       <div class="footer-copyright">
         <div class="footer-copyright-links">
           <a href="#">Conditions of Use</a>
@@ -165,7 +160,7 @@
           <a href="#">Your Ads Privacy Choices</a>
         </div>
         <div class="footer-copyright-text">
-          © 2023, PeakersHub.com, Inc. or its affiliates
+          © 2025, PeakersHub.com, Inc. or its affiliates
         </div>
       </div>
     </footer>

@@ -74,12 +74,12 @@
 }
 
 .footer-logo .logo {
-  color: white !important;
+  color: #ff9900 !important;
   font-size: 24px !important;
 }
 
 .footer-logo .logo span {
-  color: #ff9900 !important;
+  color: white !important;
 }
 
 .footer-locale,

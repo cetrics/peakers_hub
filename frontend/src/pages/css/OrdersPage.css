@@ -1,0 +1,285 @@
+:root {
+  --amz-bg: #f7fafa;
+  --amz-card: #fff;
+  --amz-border: #d5d9d9;
+  --amz-text: #0f1111;
+  --amz-muted: #565959;
+  --amz-link: #007185;
+  --amz-yellow: #ffa41c;
+  --amz-yellow-hover: #ffa41c;
+  --amz-pill-green: #067d62;
+  --amz-pill-orange: #b12704;
+  --amz-pill-gray: #6b7280;
+}
+
+.orders-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+  color: var(--amz-text);
+  background: var(--amz-bg);
+}
+
+.orders-header {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.orders-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.orders-search input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--amz-border);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.orders-tabs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0 16px;
+  border-bottom: 1px solid var(--amz-border);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.orders-tabs > button {
+  background: transparent;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  color: var(--amz-link);
+  cursor: pointer;
+  font-weight: 600;
+}
+.orders-tabs > button.active {
+  background: #eef6f8;
+  color: var(--amz-text);
+  border: 1px solid var(--amz-border);
+}
+
+.orders-range {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.orders-range label {
+  color: var(--amz-muted);
+  font-size: 13px;
+}
+.orders-range select {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--amz-border);
+  background: white;
+}
+
+.orders-empty {
+  color: var(--amz-muted);
+  padding: 32px 0;
+}
+
+.orders-list {
+  display: grid;
+  gap: 16px;
+}
+
+.order-card {
+  background: var(--amz-card);
+  border: 1px solid var(--amz-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.order-card__meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) auto;
+  gap: 16px;
+  padding: 12px 16px;
+  background: #f8fafa;
+  border-bottom: 1px solid var(--amz-border);
+  align-items: center;
+}
+.meta-label {
+  font-size: 12px;
+  color: var(--amz-muted);
+  margin-bottom: 2px;
+}
+.meta-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+.order-card__number .meta-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+
+.order-card__links {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.link-like {
+  background: none;
+  border: none;
+  color: var(--amz-link);
+  cursor: pointer;
+  padding: 0;
+  font-weight: 600;
+}
+
+.order-card__status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--amz-border);
+  background: #fff;
+}
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+}
+.status-success {
+  background: var(--amz-pill-green);
+}
+.status-pending {
+  background: #e67e22;
+}
+.status-archived {
+  background: #4b5563; /* dark gray-blue */
+}
+
+.status-failed {
+  background: var(--amz-pill-gray);
+}
+.status-text {
+  font-weight: 700;
+}
+
+/* Body: 3-column grid (image | info | actions) */
+.order-card__body {
+  display: grid;
+  grid-template-columns: 84px 1fr 260px;
+  gap: 16px;
+  padding: 16px;
+  align-items: start; /* top-align all cells */
+}
+
+.order-thumb {
+  width: 84px;
+  height: 84px;
+  border: 1px solid var(--amz-border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: #fff;
+}
+.order-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.thumb-placeholder {
+  font-size: 28px;
+  opacity: 0.7;
+}
+
+/* Allow middle column to shrink without pushing actions down */
+.order-info {
+  min-width: 0;
+}
+
+.order-info .item-title {
+  color: var(--amz-link);
+  font-weight: 600;
+  text-decoration: none;
+}
+.order-info .item-title:hover {
+  text-decoration: underline;
+}
+.order-info .item-sub {
+  color: var(--amz-muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+.order-info .item-meta {
+  color: var(--amz-muted);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+/* Actions: stay in the same row, top-right of the card body */
+.order-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: start; /* top-align within its grid cell */
+  justify-self: end; /* right-align within its grid cell */
+  margin-left: 0; /* override previous auto margin */
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid var(--amz-border);
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover {
+  background: #f7f7f7;
+}
+.btn-primary {
+  background: var(--amz-yellow);
+  border-color: #ffa41c;
+}
+.btn-primary:hover {
+  background: var(--amz-yellow-hover);
+}
+
+/* Responsive */
+@media (max-width: 820px) {
+  .orders-header {
+    grid-template-columns: 1fr;
+  }
+  .order-card__meta {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 8px;
+  }
+  .order-card__links {
+    grid-column: 1 / -1;
+  }
+
+  /* Keep 3 columns on smaller screens so actions stay inline */
+  .order-card__body {
+    grid-template-columns: 64px minmax(0, 1fr) clamp(180px, 28vw, 260px);
+    align-items: start; /* ensure top alignment */
+  }
+
+  /* Keep actions in the same row; right/top aligned */
+  .order-actions {
+    grid-column: auto;
+    align-self: start;
+    justify-self: end;
+    /* keep vertical stack of buttons; if you prefer a horizontal row here:
+       flex-direction: row; flex-wrap: wrap; gap: 6px; */
+  }
+}

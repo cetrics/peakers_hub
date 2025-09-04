@@ -1,0 +1,57 @@
+.tracking-steps {
+  display: flex;
+  justify-content: space-between;
+  margin: 40px 0;
+  position: relative;
+}
+
+.tracking-steps::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 50px;
+  right: 50px;
+  height: 4px;
+  background: #ddd;
+  z-index: 1;
+}
+
+.tracking-steps::after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 50px;
+  height: 4px;
+  background: #2e7d32; /* Amazon-style green */
+  z-index: 2;
+  width: calc((var(--progress, 0) / 3) * 100%); /* ✅ 3 = steps.length - 1 */
+  transition: width 0.3s ease;
+}
+
+.tracking-step {
+  text-align: center;
+  flex: 1;
+  position: relative;
+  z-index: 3;
+}
+
+.tracking-step .circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ddd;
+  color: #333;
+  font-weight: bold;
+  border: 2px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.tracking-step.completed .circle {
+  background: #2e7d32;
+  color: #fff;
+  border-color: #2e7d32;
+}

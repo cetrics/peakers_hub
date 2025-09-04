@@ -25,10 +25,13 @@ const Login = () => {
 
     try {
       console.log("➡️ Sending login request:", email);
+
+      const params = new URLSearchParams(location.search);
+      const from = params.get("from") || "/";
+
       const response = await axios.post("/api/login", {
         email,
         password,
-        redirect_to: location.state?.fromCheckout ? "/checkout" : "/",
       });
 
       console.log("✅ Login response:", response.data);
@@ -37,8 +40,8 @@ const Login = () => {
         localStorage.setItem("adminToken", response.data.token);
         localStorage.setItem("role", response.data.role);
 
-        console.log("🔀 Redirecting to:", response.data.redirect);
-        navigate(response.data.redirect || "/");
+        console.log("🔀 Redirecting to:", from);
+        navigate(from, { replace: true });
       } else {
         setError(response.data.message || "Login failed");
         console.warn("⚠️ Login failed:", response.data.message);
